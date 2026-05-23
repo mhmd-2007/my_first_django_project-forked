@@ -1,0 +1,5 @@
+__pycatch__/
+*.pyc
+db.sqlite3
+.venv
+venv/
