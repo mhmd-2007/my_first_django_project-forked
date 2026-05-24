@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Survey</title>
+    <link rel="stylesheet" href="survey_list_style.css">
+</head>
+<body>
+    <body>
+    <h1>نظرسنجی</h1>
+    
+    {% if surveys %}
+        {% for survey in surveys %}
+            <div class="survey-card">
+                <h3>{{ survey.product.name }}</h3>
+                <p>{{ survey.question }}</p>
+                <p>تاریخ ایجاد: {{ survey.created_at|date:"Y/m/d" }}</p>
+                <a href="#" class="btn">شرکت در نظرسنجی →</a>
+            </div>
+        {% endfor %}
+    {% else %}
+        <p>هیچ نظرسنجی فعالی وجود ندارد.</p>
+    {% endif %}
+</body>
+</html>
