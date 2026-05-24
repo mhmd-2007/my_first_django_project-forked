@@ -1,5 +1,5 @@
 from django.db import models
-
+from django.contrib.auth.models import User
 # Create your models here.
 
 class Product(models.Model):
@@ -20,10 +20,10 @@ class Survey(models.Model):
     def __str__(self):
         return f"{self.product.name}: {self.question[:64]}"
 
-class Meta(models.Model):
-    ordering = ["-created_at"]
-    verbose_name = "poll"
-    verbose_name_plural = "polls"
+    class Meta:
+        ordering = ["-created_at"]
+        verbose_name = "poll"
+        verbose_name_plural = "polls"
 
 class Choice(models.Model):
     '''Options of poll'''
@@ -33,3 +33,16 @@ class Choice(models.Model):
 
     def __str__(self):
         return self.choice_text
+
+class Vote(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name="User")
+    choice = models.ForeignKey(Choice, on_delete=models.CASCADE, verbose_name="Option")
+    voted_at = models.DateTimeField(auto_now_add=True, verbose_name="vote time")
+
+    class Meta:
+        unique_together = ["user", "choice"]
+        verbose_name = "vote"
+        verbose_name_plural = "votes"
+
+    def __str__(self):
+        return f"{self.user.usernaem} voted for {self.choice.choice_text}"
