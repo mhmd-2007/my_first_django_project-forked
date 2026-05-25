@@ -46,6 +46,15 @@
 </head>
 <body>
     <body>
+        <div style="background-color: #e9ecef; padding: 10px; border-radius: 5px; margin-bottom: 20px; text-align: left;">
+            {% if user.is_authenticated %}
+                <span>خوش اومدی، {{ user.username }}!</span>
+                <a href="{% url 'logout' %}" style="margin-right: 15px; color: #dc3545;">خروج</a>
+            {% else %}
+                <a href="{% url 'login' %}">ورود</a>
+                <a href="{% url 'register' %}" style="margin-right: 15px;">ثبت‌نام</a>
+            {% endif %}
+        </div>
     <h1>نظرسنجی</h1>
     
     {% if surveys %}

@@ -1,6 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
-# Create your models here.
+from django.conf import settings
 
 class Product(models.Model):
     name = models.CharField(max_length=255, verbose_name="product name:")
@@ -35,14 +35,17 @@ class Choice(models.Model):
         return self.choice_text
 
 class Vote(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name="User")
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, verbose_name="User")
     choice = models.ForeignKey(Choice, on_delete=models.CASCADE, verbose_name="Option")
     voted_at = models.DateTimeField(auto_now_add=True, verbose_name="vote time")
 
     class Meta:
-        unique_together = ["user", "choice"]
+#        unique_together = ["user", "choice"]
+        constraints = [
+            models.UniqueConstraint(fields=['user', 'choice'], name='unique_user_choice')
+        ]
         verbose_name = "vote"
         verbose_name_plural = "votes"
 
     def __str__(self):
-        return f"{self.user.usernaem} voted for {self.choice.choice_text}"
+        return f"{self.user.username} voted for {self.choice.choice_text}"

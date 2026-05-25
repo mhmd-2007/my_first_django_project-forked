@@ -1,7 +1,8 @@
 from django.shortcuts import render, get_object_or_404
-from .models import Survey, Choice
+from .models import Survey, Choice, Vote
 from django.http import HttpResponse, HttpResponseRedirect
 from django.urls import reverse
+from django.contrib.auth.decorators import login_required
 
 def survey_list(request):
     surveys = Survey.objects.filter(is_active=True)
@@ -15,8 +16,18 @@ def survey_detail(request, survey_id):
         'choices': choices,
     })
 
+@login_required
 def vote(request, survey_id):
     survey = get_object_or_404(Survey, pk=survey_id, is_active=True)
+
+    existing_vote = vote.objects.filter(user=request.user, choice__survey=survey).first()
+    if existing_vote:
+        choices = survey.choice_set.all()
+        return render(request, 'app/survey_detail.html', {
+            'survey' : survey,
+            'choices' : choices, 
+            'error_message' : "شما قبلا به این نظرسنجی رای داده اید.",
+        })
 
     try:
         selected_choice = survey.choice_set.get(pk=request.POST['choice'])
@@ -31,8 +42,10 @@ def vote(request, survey_id):
         selected_choice.votes += 1
         selected_choice.save()
 
+        Vote.objects.create(user=request.user, choice=selected_choice)
+
         return HttpResponseRedirect(reverse('results', args=(survey.id,)))
-    
+
 def result(request, survey_id):
     survey = get_object_or_404(Survey, pk=survey_id, is_active=True)
 
