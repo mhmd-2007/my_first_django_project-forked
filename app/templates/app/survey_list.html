@@ -4,7 +4,45 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Survey</title>
-    <link rel="stylesheet" href="survey_list_style.css">
+    <style>
+        body {
+            font-family: 'Vazir', sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .survey-card {
+            background: white;
+            padding: 20px;
+            margin-bottom: 15px;
+            border-radius: 10px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .survey-card h3 {
+            margin-top: 0;
+            color: #333;
+        }
+        .survey-card p {
+            color: #666;
+        }
+        .btn {
+            display: inline-block;
+            margin: auto 0px;
+            background-color: #007bff;
+            color: white;
+            padding: 10px 20px;
+            text-decoration: none;
+            border-radius: 5px;
+        }
+        .btn:hover {
+            background-color: #0056b3;
+        }
+        .inactive {
+            background-color: #f8d7da;
+            border: 1px solid #f5c6cb;
+        }
+    </style>
 </head>
 <body>
     <body>
@@ -16,7 +54,7 @@
                 <h3>{{ survey.product.name }}</h3>
                 <p>{{ survey.question }}</p>
                 <p>تاریخ ایجاد: {{ survey.created_at|date:"Y/m/d" }}</p>
-                <a href="#" class="btn">شرکت در نظرسنجی →</a>
+                <a href="{% url 'survey_detail' survey.id %}" class="btn">شرکت در نظرسنجی →</a>
             </div>
         {% endfor %}
     {% else %}
