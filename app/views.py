@@ -33,3 +33,24 @@ def vote(request, survey_id):
 
         return HttpResponseRedirect(reverse('results', args=(survey.id,)))
     
+def result(request, survey_id):
+    survey = get_object_or_404(Survey, pk=survey_id, is_active=True)
+
+    total_votes = sum(choice.votes for choice in survey.choice_st.all())
+
+    choices_with_perchetage = []
+    for choice in survey.choice_set.all():
+        if total_votes > 0:
+            percentage = (choice.votes / total_votes) * 100
+        else:
+            percentage = 0
+        choices_with_perchetage.append({
+            "choice" : choice,
+            "percentage" : round(percentage, 2),
+        })
+        
+    return render(request, "app/result.html", {
+        "survry" : survey,
+        "choices_with_percentage" : choices_with_perchetage, 
+        "total_votes" : total_votes,
+    })

@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="fa">
+<head>
+    <meta charset="UTF-8">
+    <title>نتایج نظرسنجی: {{ survey.question }}</title>
+    <style>
+        body {
+            font-family: 'Vazir', sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .results-container {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #333;
+            border-bottom: 2px solid #28a745;
+            padding-bottom: 10px;
+        }
+        .product-badge {
+            background-color: #007bff;
+            color: white;
+            padding: 5px 10px;
+            border-radius: 5px;
+            display: inline-block;
+            font-size: 14px;
+        }
+        .total-votes {
+            background-color: #e9ecef;
+            padding: 10px;
+            border-radius: 5px;
+            margin: 20px 0;
+            text-align: center;
+            font-size: 18px;
+        }
+        .result-item {
+            margin: 20px 0;
+        }
+        .result-label {
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+        .progress-bar-container {
+            background-color: #e9ecef;
+            border-radius: 10px;
+            height: 30px;
+            overflow: hidden;
+            margin: 5px 0;
+        }
+        .progress-bar {
+            background-color: #28a745;
+            height: 100%;
+            color: white;
+            line-height: 30px;
+            padding-right: 10px;
+            border-radius: 10px;
+            transition: width 0.5s ease;
+        }
+        .vote-count {
+            color: #6c757d;
+            font-size: 14px;
+            margin-top: 5px;
+        }
+        .btn {
+            display: inline-block;
+            background-color: #007bff;
+            color: white;
+            padding: 10px 20px;
+            text-decoration: none;
+            border-radius: 5px;
+            margin-top: 20px;
+            margin-left: 10px;
+        }
+        .btn:hover {
+            background-color: #0056b3;
+        }
+        .btn-success {
+            background-color: #28a745;
+        }
+        .btn-success:hover {
+            background-color: #218838;
+        }
+    </style>
+</head>
+<body>
+    <div class="results-container">
+        <span class="product-badge">{{ survey.product.name }}</span>
+        <h1>{{ survey.question }}</h1>
+        
+        <div class="total-votes">
+            📊 مجموع آراء: {{ total_votes }} نفر
+        </div>
+        
+        <div class="results-list">
+            {% for item in choices_with_percentage %}
+                <div class="result-item">
+                    <div class="result-label">{{ item.choice.choice_text }}</div>
+                    <div class="progress-bar-container">
+                        <div class="progress-bar" style="width: {{ item.percentage }}%;">
+                            {{ item.percentage }}%
+                        </div>
+                    </div>
+                    <div class="vote-count">
+                        {{ item.choice.votes }} رای
+                    </div>
+                </div>
+            {% empty %}
+                <p>هیچ گزینه‌ای برای این نظرسنجی وجود ندارد.</p>
+            {% endfor %}
+        </div>
+        
+        <div style="margin-top: 30px;">
+            <a href="{% url 'survey_detail' survey.id %}" class="btn">← بازگشت به نظرسنجی</a>
+            <a href="{% url 'survey_list' %}" class="btn btn-success">لیست نظرسنجی‌ها →</a>
+        </div>
+    </div>
+</body>
+</html>
