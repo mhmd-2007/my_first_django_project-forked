@@ -1,73 +1,227 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="fa">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Survey</title>
+    <title>نظرسنجی‌</title>
     <style>
-        body {
-            font-family: 'Vazir', sans-serif;
-            max-width: 800px;
-            margin: 0 auto;
-            padding: 20px;
-            background-color: #f5f5f5;
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
         }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        /* Header Styles */
+        .header {
+            background: white;
+            border-radius: 15px;
+            padding: 20px 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .logo h1 {
+            color: #667eea;
+            font-size: 24px;
+        }
+
+        .logo p {
+            color: #666;
+            font-size: 14px;
+            margin-top: 5px;
+        }
+
+        .user-menu {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .welcome-text {
+            color: #333;
+            font-weight: 500;
+        }
+
+        .btn {
+            padding: 8px 20px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .btn-primary {
+            background: #667eea;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #5a67d8;
+            transform: translateY(-2px);
+        }
+
+        .btn-success {
+            background: #28a745;
+            color: white;
+        }
+
+        .btn-success:hover {
+            background: #218838;
+            transform: translateY(-2px);
+        }
+
+        .btn-danger {
+            background: #dc3545;
+            color: white;
+        }
+
+        .btn-danger:hover {
+            background: #c82333;
+            transform: translateY(-2px);
+        }
+
+        .btn-outline {
+            border: 2px solid #667eea;
+            color: #667eea;
+        }
+
+        .btn-outline:hover {
+            background: #667eea;
+            color: white;
+        }
+
+        /* Survey Grid */
+        .surveys-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 25px;
+        }
+
         .survey-card {
             background: white;
-            padding: 20px;
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease;
+        }
+
+        .survey-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .product-badge {
+            display: inline-block;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 12px;
             margin-bottom: 15px;
-            border-radius: 10px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
         }
+
         .survey-card h3 {
-            margin-top: 0;
             color: #333;
+            font-size: 20px;
+            margin-bottom: 10px;
         }
-        .survey-card p {
+
+        .question-text {
+            color: #666;
+            line-height: 1.6;
+            margin-bottom: 15px;
+        }
+
+        .card-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 20px;
+            padding-top: 15px;
+            border-top: 1px solid #eee;
+        }
+
+        .date {
+            color: #999;
+            font-size: 12px;
+        }
+
+        .no-surveys {
+            background: white;
+            border-radius: 15px;
+            padding: 50px;
+            text-align: center;
             color: #666;
         }
-        .btn {
-            display: inline-block;
-            margin: auto 0px;
-            background-color: #007bff;
-            color: white;
-            padding: 10px 20px;
-            text-decoration: none;
-            border-radius: 5px;
-        }
-        .btn:hover {
-            background-color: #0056b3;
-        }
-        .inactive {
-            background-color: #f8d7da;
-            border: 1px solid #f5c6cb;
+
+        @media (max-width: 768px) {
+            .header {
+                flex-direction: column;
+                text-align: center;
+                gap: 15px;
+            }
+            
+            .surveys-grid {
+                grid-template-columns: 1fr;
+            }
         }
     </style>
 </head>
 <body>
-    <body>
-        <div style="background-color: #e9ecef; padding: 10px; border-radius: 5px; margin-bottom: 20px; text-align: left;">
-            {% if user.is_authenticated %}
-                <span>خوش اومدی، {{ user.username }}!</span>
-                <a href="{% url 'logout' %}" style="margin-right: 15px; color: #dc3545;">خروج</a>
+    <div class="container">
+        <div class="header">
+            <div class="logo">
+                <h1>📊 تکنولایف</h1>
+                <p>سامانه نظرسنجی و تحلیل بازار</p>
+            </div>
+            <div class="user-menu">
+                {% if user.is_authenticated %}
+                    <span class="welcome-text">خوش اومدی، {{ user.username }}!</span>
+                    <a href="{% url 'profile_view' %}" class="btn btn-success">👤 پروفایل</a>
+                    <a href="{% url 'logout' %}" class="btn btn-danger">🚪 خروج</a>
+                {% else %}
+                    <a href="{% url 'login' %}" class="btn btn-primary">ورود</a>
+                    <a href="{% url 'register' %}" class="btn btn-outline">ثبت‌نام</a>
+                {% endif %}
+            </div>
+        </div>
+
+        <div class="surveys-grid">
+            {% if surveys %}
+                {% for survey in surveys %}
+                    <div class="survey-card">
+                        <span class="product-badge">{{ survey.product.name }}</span>
+                        <h3>{{ survey.question|truncatechars:60 }}</h3>
+                        <p class="question-text">{{ survey.question|truncatechars:100 }}</p>
+                        <div class="card-footer">
+                            <span class="date">📅 {{ survey.created_at|date:"Y/m/d" }}</span>
+                            <a href="{% url 'survey_detail' survey.id %}" class="btn btn-primary">شرکت در نظرسنجی →</a>
+                        </div>
+                    </div>
+                {% endfor %}
             {% else %}
-                <a href="{% url 'login' %}">ورود</a>
-                <a href="{% url 'register' %}" style="margin-right: 15px;">ثبت‌نام</a>
+                <div class="no-surveys">
+                    <p>😔 هیچ نظرسنجی فعالی وجود ندارد.</p>
+                    <p style="margin-top: 10px; font-size: 14px;">لطفاً بعداً مراجعه کنید.</p>
+                </div>
             {% endif %}
         </div>
-    <h1>نظرسنجی</h1>
-    
-    {% if surveys %}
-        {% for survey in surveys %}
-            <div class="survey-card">
-                <h3>{{ survey.product.name }}</h3>
-                <p>{{ survey.question }}</p>
-                <p>تاریخ ایجاد: {{ survey.created_at|date:"Y/m/d" }}</p>
-                <a href="{% url 'survey_detail' survey.id %}" class="btn">شرکت در نظرسنجی →</a>
-            </div>
-        {% endfor %}
-    {% else %}
-        <p>هیچ نظرسنجی فعالی وجود ندارد.</p>
-    {% endif %}
+    </div>
 </body>
 </html>

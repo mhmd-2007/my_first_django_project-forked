@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="fa">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>پروفایل {{ user.username }} | تکنولایف</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        .header {
+            background: white;
+            border-radius: 15px;
+            padding: 20px 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .logo h1 {
+            color: #667eea;
+            font-size: 24px;
+        }
+
+        .user-menu {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+        }
+
+        .btn {
+            padding: 8px 20px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .btn-primary {
+            background: #667eea;
+            color: white;
+        }
+
+        .btn-success {
+            background: #28a745;
+            color: white;
+        }
+
+        .btn-danger {
+            background: #dc3545;
+            color: white;
+        }
+
+        .btn-secondary {
+            background: #6c757d;
+            color: white;
+        }
+
+        .profile-card {
+            background: white;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+
+        .profile-header {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            padding: 40px;
+            text-align: center;
+            color: white;
+        }
+
+        .avatar {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            border: 4px solid white;
+            margin-bottom: 15px;
+            object-fit: cover;
+        }
+
+        .profile-header h2 {
+            font-size: 24px;
+            margin-bottom: 5px;
+        }
+
+        .profile-header p {
+            opacity: 0.9;
+        }
+
+        .profile-body {
+            padding: 30px;
+        }
+
+        .info-section {
+            margin-bottom: 25px;
+        }
+
+        .info-section h3 {
+            color: #667eea;
+            margin-bottom: 15px;
+            padding-bottom: 8px;
+            border-bottom: 2px solid #e9ecef;
+        }
+
+        .info-row {
+            display: flex;
+            padding: 10px 0;
+            border-bottom: 1px solid #f0f0f0;
+        }
+
+        .info-label {
+            width: 130px;
+            font-weight: 600;
+            color: #555;
+        }
+
+        .info-value {
+            flex: 1;
+            color: #333;
+        }
+
+        .empty-field {
+            color: #999;
+            font-style: italic;
+        }
+
+        .buttons {
+            display: flex;
+            gap: 15px;
+            margin-top: 25px;
+            flex-wrap: wrap;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="logo">
+                <h1>📊 تکنولایف</h1>
+            </div>
+            <div class="user-menu">
+                <span style="color: #333;">{{ user.username }}</span>
+                <a href="{% url 'profile_edit' %}" class="btn btn-success">✏️ ویرایش</a>
+                <a href="{% url 'logout' %}" class="btn btn-danger">خروج</a>
+            </div>
+        </div>
+
+        <div class="profile-card">
+            <div class="profile-header">
+                {% if profile.avatar %}
+                    <img src="{{ profile.avatar.url }}" alt="avatar" class="avatar">
+                {% else %}
+                    <div class="avatar" style="background: rgba(255,255,255,0.2); display: flex; align-items: center; justify-content: center; font-size: 48px;">
+                        👤
+                    </div>
+                {% endif %}
+                <h2>{{ user.username }}</h2>
+                <p>{{ user.email|default:"ایمیل ثبت نشده" }}</p>
+            </div>
+
+            <div class="profile-body">
+                <div class="info-section">
+                    <h3>📝 اطلاعات شخصی</h3>
+                    <div class="info-row">
+                        <span class="info-label">نام کاربری:</span>
+                        <span class="info-value">{{ user.username }}</span>
+                    </div>
+                    <div class="info-row">
+                        <span class="info-label">ایمیل:</span>
+                        <span class="info-value">{{ user.email|default:"<span class='empty-field'>ثبت نشده</span>"|safe }}</span>
+                    </div>
+                    <div class="info-row">
+                        <span class="info-label">بیوگرافی:</span>
+                        <span class="info-value">{{ profile.bio|default:"<span class='empty-field'>ثبت نشده</span>"|safe }}</span>
+                    </div>
+                </div>
+
+                <div class="info-section">
+                    <h3>📞 اطلاعات تماس</h3>
+                    <div class="info-row">
+                        <span class="info-label">شماره تلفن:</span>
+                        <span class="info-value">{{ profile.phone|default:"<span class='empty-field'>ثبت نشده</span>"|safe }}</span>
+                    </div>
+                    <div class="info-row">
+                        <span class="info-label">وبسایت:</span>
+                        <span class="info-value">
+                            {% if profile.website %}
+                                <a href="{{ profile.website }}" target="_blank">{{ profile.website }}</a>
+                            {% else %}
+                                <span class="empty-field">ثبت نشده</span>
+                            {% endif %}
+                        </span>
+                    </div>
+                </div>
+
+                <div class="info-section">
+                    <h3>🎂 اطلاعات تکمیلی</h3>
+                    <div class="info-row">
+                        <span class="info-label">تاریخ تولد:</span>
+                        <span class="info-value">{{ profile.birth_date|date:"Y/m/d"|default:"<span class='empty-field'>ثبت نشده</span>"|safe }}</span>
+                    </div>
+                    <div class="info-row">
+                        <span class="info-label">تاریخ عضویت:</span>
+                        <span class="info-value">{{ user.date_joined|date:"Y/m/d H:i" }}</span>
+                    </div>
+                    <div class="info-row">
+                        <span class="info-label">آخرین ورود:</span>
+                        <span class="info-value">{{ user.last_login|date:"Y/m/d H:i" }}</span>
+                    </div>
+                </div>
+
+                <div class="buttons">
+                    <a href="{% url 'profile_edit' %}" class="btn btn-success">✏️ ویرایش پروفایل</a>
+                    <a href="{% url 'survey_list' %}" class="btn btn-secondary">← بازگشت به صفحه اصلی</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

@@ -2,97 +2,253 @@
 <html lang="fa">
 <head>
     <meta charset="UTF-8">
-    <title>{{ survey.question }}</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ survey.question }} | تکنولایف</title>
     <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
         body {
-            font-family: 'Vazir', sans-serif;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
             max-width: 800px;
             margin: 0 auto;
-            padding: 20px;
-            background-color: #f5f5f5;
         }
+
+        .header {
+            background: white;
+            border-radius: 15px;
+            padding: 20px 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .logo h1 {
+            color: #667eea;
+            font-size: 24px;
+        }
+
+        .user-menu {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+        }
+
+        .btn {
+            padding: 8px 20px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .btn-primary {
+            background: #667eea;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #5a67d8;
+        }
+
+        .btn-success {
+            background: #28a745;
+            color: white;
+        }
+
+        .btn-danger {
+            background: #dc3545;
+            color: white;
+        }
+
+        .btn-secondary {
+            background: #6c757d;
+            color: white;
+        }
+
         .survey-container {
             background: white;
-            padding: 30px;
-            border-radius: 10px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            border-radius: 15px;
+            padding: 35px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
         }
+
+        .product-badge {
+            display: inline-block;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 12px;
+            margin-bottom: 20px;
+        }
+
         h1 {
             color: #333;
-            border-bottom: 2px solid #007bff;
-            padding-bottom: 10px;
+            font-size: 28px;
+            margin-bottom: 15px;
         }
-        .product-badge {
-            background-color: #007bff;
-            color: white;
-            padding: 5px 10px;
-            border-radius: 5px;
-            display: inline-block;
+
+        .date {
+            color: #999;
             font-size: 14px;
+            margin-bottom: 30px;
+            display: block;
         }
+
         .choices-list {
-            margin: 20px 0;
+            margin: 30px 0;
         }
+
         .choice-item {
-            margin: 15px 0;
-            padding: 15px;
-            background-color: #f8f9fa;
-            border-radius: 5px;
-            border: 1px solid #dee2e6;
+            background: #f8f9fa;
+            border: 2px solid #e9ecef;
+            border-radius: 12px;
+            padding: 15px 20px;
+            margin-bottom: 15px;
+            transition: all 0.3s ease;
+            cursor: pointer;
         }
-        .vote-btn {
-            background-color: #28a745;
+
+        .choice-item:hover {
+            border-color: #667eea;
+            background: #f0f4ff;
+        }
+
+        .choice-item input {
+            margin-right: 15px;
+            transform: scale(1.2);
+            cursor: pointer;
+        }
+
+        .choice-item label {
+            font-size: 16px;
+            color: #333;
+            cursor: pointer;
+            font-weight: 500;
+        }
+
+        .error-message {
+            background: #f8d7da;
+            color: #721c24;
+            padding: 12px 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            border: 1px solid #f5c6cb;
+        }
+
+        .form-actions {
+            margin-top: 30px;
+        }
+
+        button {
+            background: linear-gradient(135deg, #667eea, #764ba2);
             color: white;
             border: none;
-            padding: 10px 20px;
-            border-radius: 5px;
-            cursor: pointer;
+            padding: 12px 30px;
+            border-radius: 10px;
             font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
         }
-        .vote-btn:hover {
-            background-color: #218838;
+
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
         }
+
         .back-link {
             display: inline-block;
-            margin-top: 20px;
-            color: #007bff;
+            margin-top: 30px;
+            color: #667eea;
             text-decoration: none;
+        }
+
+        .back-link:hover {
+            text-decoration: underline;
         }
     </style>
 </head>
 <body>
-    <div class="survey-container">
-        <span class="product-badge">{{ survey.product.name }}</span>
-        <h1>{{ survey.question }}</h1>
-        {% if error_message %}
-            <div style="background-color: #f8d7da; color: #721c24; padding: 10px; border-radius: 5px; margin: 10px 0;">
-                {{ error_message }}
+    <div class="container">
+        <div class="header">
+            <div class="logo">
+                <h1>📊 تکنولایف</h1>
             </div>
-        {% endif %}
-        <p>تاریخ انتشار: {{ survey.created_at|date:"Y/m/d" }}</p>
-        
-        <div class="choices-list">
-            <h3>گزینه‌ها:</h3>
-            <form action="{%url 'vote' survey.id %}" method="post">
+            <div class="user-menu">
+                {% if user.is_authenticated %}
+                    <span style="color: #333;">{{ user.username }}</span>
+                    <a href="{% url 'profile_view' %}" class="btn btn-success">پروفایل</a>
+                    <a href="{% url 'logout' %}" class="btn btn-danger">خروج</a>
+                {% else %}
+                    <a href="{% url 'login' %}" class="btn btn-primary">ورود</a>
+                    <a href="{% url 'register' %}" class="btn btn-secondary">ثبت‌نام</a>
+                {% endif %}
+            </div>
+        </div>
+
+        <div class="survey-container">
+            <span class="product-badge">{{ survey.product.name }}</span>
+            <h1>{{ survey.question }}</h1>
+            <span class="date">📅 {{ survey.created_at|date:"Y/m/d" }}</span>
+
+            {% if error_message %}
+                <div class="error-message">
+                    ⚠️ {{ error_message }}
+                </div>
+            {% endif %}
+
+            <form method="post" action="{% url 'vote' survey.id %}">
                 {% csrf_token %}
-                {% for choice in choices %}
-                    <div class="choice-item">
-                        <label>
-                            <input type="radio" name="choice" value="{{ choice.id }}" required>
-                            {{ choice.choice_text }}
-                        </label>
-                    </div>
-                {% empty %}
-                    <p>هیچ گزینه‌ای برای این نظرسنجی تعریف نشده است.</p>
-                {% endfor %}
-                
+                <div class="choices-list">
+                    {% for choice in choices %}
+                        <div class="choice-item" onclick="document.getElementById('choice_{{ choice.id }}').click();">
+                            <input type="radio" name="choice" value="{{ choice.id }}" id="choice_{{ choice.id }}" required>
+                            <label for="choice_{{ choice.id }}">{{ choice.choice_text }}</label>
+                        </div>
+                    {% empty %}
+                        <p style="color: #999; text-align: center;">هیچ گزینه‌ای برای این نظرسنجی تعریف نشده است.</p>
+                    {% endfor %}
+                </div>
+
                 {% if choices %}
-                    <button type="submit" class="vote-btn">✓ ثبت رای</button>
+                    <div class="form-actions">
+                        <button type="submit">✓ ثبت رأی</button>
+                    </div>
                 {% endif %}
             </form>
+
+            <a href="{% url 'survey_list' %}" class="back-link">← بازگشت به لیست نظرسنجی‌ها</a>
         </div>
-        
-        <a href="{% url 'survey_list' %}" class="back-link">← بازگشت به لیست نظرسنجی‌ها</a>
     </div>
+
+    <script>
+        // Highlight selected choice
+        document.querySelectorAll('input[name="choice"]').forEach(radio => {
+            radio.addEventListener('change', function() {
+                document.querySelectorAll('.choice-item').forEach(item => {
+                    item.style.borderColor = '#e9ecef';
+                    item.style.background = '#f8f9fa';
+                });
+                if (this.checked) {
+                    this.closest('.choice-item').style.borderColor = '#28a745';
+                    this.closest('.choice-item').style.background = '#e8f5e9';
+                }
+            });
+        });
+    </script>
 </body>
 </html>
