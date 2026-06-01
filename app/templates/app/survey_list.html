@@ -1,227 +1,126 @@
+{% load static %}
 <!DOCTYPE html>
-<html lang="fa">
+<html lang="fa" dir="rtl">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>نظرسنجی‌</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            min-height: 100vh;
-            padding: 20px;
-        }
-
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-        }
-
-        /* Header Styles */
-        .header {
-            background: white;
-            border-radius: 15px;
-            padding: 20px 30px;
-            margin-bottom: 30px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            flex-wrap: wrap;
-        }
-
-        .logo h1 {
-            color: #667eea;
-            font-size: 24px;
-        }
-
-        .logo p {
-            color: #666;
-            font-size: 14px;
-            margin-top: 5px;
-        }
-
-        .user-menu {
-            display: flex;
-            gap: 15px;
-            align-items: center;
-            flex-wrap: wrap;
-        }
-
-        .welcome-text {
-            color: #333;
-            font-weight: 500;
-        }
-
-        .btn {
-            padding: 8px 20px;
-            border-radius: 8px;
-            text-decoration: none;
-            font-weight: 500;
-            transition: all 0.3s ease;
-        }
-
-        .btn-primary {
-            background: #667eea;
-            color: white;
-        }
-
-        .btn-primary:hover {
-            background: #5a67d8;
-            transform: translateY(-2px);
-        }
-
-        .btn-success {
-            background: #28a745;
-            color: white;
-        }
-
-        .btn-success:hover {
-            background: #218838;
-            transform: translateY(-2px);
-        }
-
-        .btn-danger {
-            background: #dc3545;
-            color: white;
-        }
-
-        .btn-danger:hover {
-            background: #c82333;
-            transform: translateY(-2px);
-        }
-
-        .btn-outline {
-            border: 2px solid #667eea;
-            color: #667eea;
-        }
-
-        .btn-outline:hover {
-            background: #667eea;
-            color: white;
-        }
-
-        /* Survey Grid */
-        .surveys-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
-            gap: 25px;
-        }
-
-        .survey-card {
-            background: white;
-            border-radius: 15px;
-            padding: 25px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-            transition: transform 0.3s ease;
-        }
-
-        .survey-card:hover {
-            transform: translateY(-5px);
-        }
-
-        .product-badge {
-            display: inline-block;
-            background: linear-gradient(135deg, #667eea, #764ba2);
-            color: white;
-            padding: 5px 12px;
-            border-radius: 20px;
-            font-size: 12px;
-            margin-bottom: 15px;
-        }
-
-        .survey-card h3 {
-            color: #333;
-            font-size: 20px;
-            margin-bottom: 10px;
-        }
-
-        .question-text {
-            color: #666;
-            line-height: 1.6;
-            margin-bottom: 15px;
-        }
-
-        .card-footer {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-top: 20px;
-            padding-top: 15px;
-            border-top: 1px solid #eee;
-        }
-
-        .date {
-            color: #999;
-            font-size: 12px;
-        }
-
-        .no-surveys {
-            background: white;
-            border-radius: 15px;
-            padding: 50px;
-            text-align: center;
-            color: #666;
-        }
-
-        @media (max-width: 768px) {
-            .header {
-                flex-direction: column;
-                text-align: center;
-                gap: 15px;
-            }
-            
-            .surveys-grid {
-                grid-template-columns: 1fr;
-            }
-        }
-    </style>
+    <title>طلای اینانلو | خرید و فروش و تحلیل بازار</title>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 </head>
 <body>
-    <div class="container">
-        <div class="header">
-            <div class="logo">
-                <h1>📊 تکنولایف</h1>
-                <p>سامانه نظرسنجی و تحلیل بازار</p>
-            </div>
-            <div class="user-menu">
-                {% if user.is_authenticated %}
-                    <span class="welcome-text">خوش اومدی، {{ user.username }}!</span>
-                    <a href="{% url 'profile_view' %}" class="btn btn-success">👤 پروفایل</a>
-                    <a href="{% url 'logout' %}" class="btn btn-danger">🚪 خروج</a>
-                {% else %}
-                    <a href="{% url 'login' %}" class="btn btn-primary">ورود</a>
-                    <a href="{% url 'register' %}" class="btn btn-outline">ثبت‌نام</a>
-                {% endif %}
-            </div>
-        </div>
 
-        <div class="surveys-grid">
-            {% if surveys %}
-                {% for survey in surveys %}
-                    <div class="survey-card">
-                        <span class="product-badge">{{ survey.product.name }}</span>
-                        <h3>{{ survey.question|truncatechars:60 }}</h3>
-                        <p class="question-text">{{ survey.question|truncatechars:100 }}</p>
-                        <div class="card-footer">
-                            <span class="date">📅 {{ survey.created_at|date:"Y/m/d" }}</span>
-                            <a href="{% url 'survey_detail' survey.id %}" class="btn btn-primary">شرکت در نظرسنجی →</a>
-                        </div>
+<!-- Loading Screen -->
+<div id="loading" class="loading show">
+    <div class="spinner"></div>
+</div>
+
+<!-- Navbar -->
+<nav class="navbar">
+    <div class="container">
+        <a href="{% url 'survey_list' %}" class="logo">
+            🚀 <span>طلا اینانلو | خرید راحت</span>
+        </a>
+        
+        <div class="nav-links">
+            <a href="{% url 'survey_list' %}">🏠 خانه</a>
+            <a href="#">📊 نظرسنجی‌ها</a>
+            <a href="#">📈 درباره ما</a>
+            <a href="#">📞 تماس</a>
+            
+            {% if user.is_authenticated %}
+                <div class="dropdown">
+                    <a href="#" class="btn btn-outline" style="padding: 6px 16px;">
+                        👤 {{ user.username }}
+                    </a>
+                    <div class="dropdown-menu">
+                        <a href="{% url 'profile_view' %}">📋 پروفایل من</a>
+                        <a href="{% url 'profile_edit' %}">✏️ ویرایش پروفایل</a>
+                        <hr style="margin: 8px 0;">
+                        <a href="{% url 'logout' %}" style="color: #ef4444;">🚪 خروج</a>
                     </div>
-                {% endfor %}
-            {% else %}
-                <div class="no-surveys">
-                    <p>😔 هیچ نظرسنجی فعالی وجود ندارد.</p>
-                    <p style="margin-top: 10px; font-size: 14px;">لطفاً بعداً مراجعه کنید.</p>
                 </div>
+            {% else %}
+                <a href="{% url 'login' %}" class="btn btn-outline">ورود</a>
+                <a href="{% url 'register' %}" class="btn btn-primary">ثبت‌نام</a>
             {% endif %}
         </div>
     </div>
+</nav>
+
+<!-- Hero Section -->
+<section class="hero">
+    <div class="container">
+        <h1>خرید حرفه‌ای با ما</h1>
+        <p>نظر خود را ثبت کن، در تصمیم‌گیری‌های مهم تاثیر بگذار و نتایج را به صورت لحظه‌ای ببین.</p>
+    </div>
+</section>
+
+<!-- Main Content -->
+<main class="container">
+    <div class="section-title">
+        <h2>📋 نظرسنجی‌های فعال</h2>
+    </div>
+    
+    {% if surveys %}
+        <div class="surveys-grid">
+            {% for survey in surveys %}
+                <div class="survey-card" onclick="location.href='{% url 'survey_detail' survey.id %}'">
+                    <div class="card-badge">{{ survey.product.name }}</div>
+                    <div class="card-content">
+                        <h3>{{ survey.question|truncatechars:60 }}</h3>
+                        <p>{{ survey.question|truncatechars:100 }}</p>
+                    </div>
+                    <div class="card-footer">
+                        <span>📅 {{ survey.created_at|date:"Y/m/d" }}</span>
+                        <span>🗳️ {{ survey.choice_set.count }} گزینه</span>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <div style="text-align: center; padding: 4rem; background: white; border-radius: var(--radius);">
+            <p>😔 هیچ نظرسنجی فعالی وجود ندارد.</p>
+            <p style="margin-top: 10px; color: var(--gray);">لطفاً بعداً مراجعه کنید.</p>
+        </div>
+    {% endif %}
+</main>
+
+<!-- Footer -->
+<footer class="footer">
+    <div class="container">
+        <div class="footer-content">
+            <div class="footer-section">
+                <h4>📊 طلا اینانلو</h4>
+                <p>سامانه حرفه‌ای نظرسنجی و تحلیل بازار با قابلیت‌های پیشرفته</p>
+            </div>
+            <div class="footer-section">
+                <h4>لینک‌های سریع</h4>
+                <a href="{% url 'survey_list' %}">نظرسنجی‌ها</a>
+                <a href="#">درباره ما</a>
+                <a href="#">تماس با ما</a>
+                <a href="#">وبلاگ</a>
+            </div>
+            <div class="footer-section">
+                <h4>قوانین</h4>
+                <a href="#">شرایط استفاده</a>
+                <a href="#">حریم خصوصی</a>
+                <a href="#">پشتیبانی</a>
+            </div>
+            <div class="footer-section">
+                <h4>شبکه‌های اجتماعی</h4>
+                <a href="#">📧 ایمیل</a>
+                <a href="#">📱 تلگرام</a>
+                <a href="#">📷 اینستاگرام</a>
+                <a href="#">🐦 توییتر</a>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2024 تکنولایف. تمامی حقوق محفوظ است.</p>
+        </div>
+    </div>
+</footer>
+
+<script src="{% static 'js/main.js' %}"></script>
 </body>
 </html>
