@@ -1,48 +1,90 @@
+{% load static %}
 <!DOCTYPE html>
-<html lang="fa">
+<html lang="fa" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <title>ورود</title>
-    <style>
-        body {
-            font-family: 'Vazir', sans-serif;
-            max-width: 500px;
-            margin: 50px auto;
-            padding: 20px;
-            background-color: #f5f5f5;
-        }
-        .form-container {
-            background: white;
-            padding: 30px;
-            border-radius: 10px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-        }
-        input {
-            width: 100%;
-            padding: 10px;
-            margin: 10px 0;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-        }
-        button {
-            background-color: #007bff;
-            color: white;
-            padding: 10px 20px;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-        }
-    </style>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ورود | طلا و جواهر اینانلو</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'css/auth.css' %}">
 </head>
 <body>
-    <div class="form-container">
-        <h2>ورود</h2>
-        <form method="post">
+
+<!-- ذرات طلایی پس‌زمینه -->
+<div class="particles"></div>
+<div class="glow-rings"></div>
+
+<div class="auth-container">
+    <div class="auth-card">
+        <!-- لوگو -->
+        <div class="logo">
+            <div class="logo-icon">💎</div>
+            <h1>طلا و جواهر اینانلو</h1>
+            <p>سامانه نظرسنجی و تحلیل بازار</p>
+        </div>
+
+        <!-- عنوان -->
+        <div class="form-title">
+            <h2>خوش آمدید </h2><!--✨-->
+            <p>لطفاً وارد حساب کاربری خود شوید</p>
+        </div>
+
+        <!-- پیام خطا -->
+        {% if form.errors %}
+        <div class="error-message">
+            <span>⚠️</span>
+            <span>نام کاربری یا رمز عبور اشتباه است</span>
+        </div>
+        {% endif %}
+
+        <!-- فرم -->
+        <form method="post" id="loginForm" onsubmit="return validateLoginForm()">
             {% csrf_token %}
-            {{ form.as_p }}
-            <button type="submit">ورود</button>
+            
+            <div class="form-group">
+                <label>نام کاربری</label>
+                <div class="input-wrapper">
+                    <span class="input-icon">👤</span>
+                    <input type="text" name="username" id="username" placeholder="نام کاربری خود را وارد کنید" autocomplete="off">
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label>رمز عبور</label>
+                <div class="input-wrapper">
+                    <span class="input-icon">🔒</span>
+                    <input type="password" name="password" id="password" placeholder="رمز عبور خود را وارد کنید">
+                    <button type="button" class="toggle-password" onclick="togglePassword()">👁️</button>
+                </div>
+            </div>
+
+            <div class="form-options">
+                <label class="checkbox">
+                    <input type="checkbox" name="remember">
+                    <span>مرا به خاطر بسپار</span>
+                </label>
+                <a href="#" class="forgot-link">فراموشی رمز؟</a>
+            </div>
+
+            <button type="submit" class="auth-btn">ورود به حساب کاربری</button>
+
+            <div class="divider">
+                <span>یا</span>
+            </div>
+
+            <div class="social-buttons">
+                <button type="button" class="social-btn" onclick="socialLogin('گوگل')">🅶 گوگل</button>
+                <button type="button" class="social-btn" onclick="socialLogin('گیت‌هاب')">🐙 گیت‌هاب</button>
+            </div>
         </form>
-        <p>ثبت‌نام نکردی؟ <a href="{% url 'register' %}">ثبت‌نام</a></p>
+
+        <div class="auth-link">
+            عضو نیستید؟
+            <a href="{% url 'register' %}">ثبت‌نام کنید</a>
+        </div>
     </div>
+</div>
+
+<script src="{% static 'js/auth.js' %}"></script>
 </body>
 </html>

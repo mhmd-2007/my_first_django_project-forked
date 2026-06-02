@@ -4,45 +4,54 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>طلای اینانلو | خرید و فروش و تحلیل بازار</title>
+    <title>طلا و جواهر اینانلو</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="{% static 'css/style.css' %}">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 </head>
 <body>
 
 <!-- Loading Screen -->
 <div id="loading" class="loading show">
     <div class="spinner"></div>
+    <span>لطفا صبور باشید.</span>
 </div>
 
 <!-- Navbar -->
 <nav class="navbar">
     <div class="container">
         <a href="{% url 'survey_list' %}" class="logo">
-            🚀 <span>طلا اینانلو | خرید راحت</span>
+            <span class="logo-icon">💎</span>
+            <span>طلا و جواهر اینانلو</span>
         </a>
         
         <div class="nav-links">
-            <a href="{% url 'survey_list' %}">🏠 خانه</a>
-            <a href="#">📊 نظرسنجی‌ها</a>
-            <a href="#">📈 درباره ما</a>
-            <a href="#">📞 تماس</a>
+            <a href="{% url 'survey_list' %}" class="nav-link">خانه</a>
+            <a href="#" class="nav-link">محصولات</a>
+            <a href="#" class="nav-link">مجموعه طلا</a>
+            <a href="#" class="nav-link">ارتباط با ما</a>
             
             {% if user.is_authenticated %}
                 <div class="dropdown">
-                    <a href="#" class="btn btn-outline" style="padding: 6px 16px;">
-                        👤 {{ user.username }}
-                    </a>
+                    <div class="user-btn">
+                        <div class="user-avatar">👤</div>
+                        <span>{{ user.username }}</span>
+                        <span class="dropdown-arrow">▼</span>
+                    </div>
                     <div class="dropdown-menu">
-                        <a href="{% url 'profile_view' %}">📋 پروفایل من</a>
-                        <a href="{% url 'profile_edit' %}">✏️ ویرایش پروفایل</a>
-                        <hr style="margin: 8px 0;">
-                        <a href="{% url 'logout' %}" style="color: #ef4444;">🚪 خروج</a>
+                        <a href="{% url 'profile_view' %}">
+                            <span>👤</span>پروفایل من
+                        </a>
+                        <a href="{% url 'profile_edit' %}">
+                            <span>✏️</span> ویرایش پروفایل
+                        </a>
+                        <a href="{% url 'logout' %}" style="color: var(--primary-color);">
+                            <span>🚪</span>خروج
+                        </a>
                     </div>
                 </div>
             {% else %}
                 <a href="{% url 'login' %}" class="btn btn-outline">ورود</a>
-                <a href="{% url 'register' %}" class="btn btn-primary">ثبت‌نام</a>
+                <a href="{% url 'register' %}" class="btn btn-primary">عضویت طلایی</a>
             {% endif %}
         </div>
     </div>
@@ -51,36 +60,36 @@
 <!-- Hero Section -->
 <section class="hero">
     <div class="container">
-        <h1>خرید حرفه‌ای با ما</h1>
-        <p>نظر خود را ثبت کن، در تصمیم‌گیری‌های مهم تاثیر بگذار و نتایج را به صورت لحظه‌ای ببین.</p>
+        <h1>با اطمینان و آسوده خرید کنید</h1>
+        <p>محصولات خود را با آسودگی خاطر دیده و آنکه را که دوست داشتید انتخاب نموده.</p>
     </div>
 </section>
 
 <!-- Main Content -->
 <main class="container">
     <div class="section-title">
-        <h2>📋 نظرسنجی‌های فعال</h2>
+        <h2>📋 پرفروش ترین محصولات</h2>
     </div>
     
     {% if surveys %}
         <div class="surveys-grid">
             {% for survey in surveys %}
-                <div class="survey-card" onclick="location.href='{% url 'survey_detail' survey.id %}'">
-                    <div class="card-badge">{{ survey.product.name }}</div>
+                <div class="survey-card" data-href="{% url 'survey_detail' survey.id %}">
+                    <div class="card-badge">💎 {{ survey.product.name }}</div>
                     <div class="card-content">
                         <h3>{{ survey.question|truncatechars:60 }}</h3>
                         <p>{{ survey.question|truncatechars:100 }}</p>
                     </div>
                     <div class="card-footer">
                         <span>📅 {{ survey.created_at|date:"Y/m/d" }}</span>
-                        <span>🗳️ {{ survey.choice_set.count }} گزینه</span>
+                        <span>✨ {{ survey.choice_set.count }} گزینه</span>
                     </div>
                 </div>
             {% endfor %}
         </div>
     {% else %}
-        <div style="text-align: center; padding: 4rem; background: white; border-radius: var(--radius);">
-            <p>😔 هیچ نظرسنجی فعالی وجود ندارد.</p>
+        <div style="text-align: center; padding: 60px; background: rgba(255,255,255,0.85); backdrop-filter: blur(10px); border-radius: 24px;">
+            <p style="font-size: 1.2rem;">😔 هیچ نظرسنجی فعالی وجود ندارد.</p>
             <p style="margin-top: 10px; color: var(--gray);">لطفاً بعداً مراجعه کنید.</p>
         </div>
     {% endif %}
@@ -91,32 +100,30 @@
     <div class="container">
         <div class="footer-content">
             <div class="footer-section">
-                <h4>📊 طلا اینانلو</h4>
-                <p>سامانه حرفه‌ای نظرسنجی و تحلیل بازار با قابلیت‌های پیشرفته</p>
+                <h4>💎 تکنولایف</h4>
+                <p>سامانه حرفه‌ای نظرسنجی و تحلیل بازار طلا و جواهر</p>
             </div>
             <div class="footer-section">
-                <h4>لینک‌های سریع</h4>
-                <a href="{% url 'survey_list' %}">نظرسنجی‌ها</a>
+                <h4>دسترسی سریع</h4>
+                <a href="#">محصولات ما</a>
+                <a href="#">مجموعه طلا</a>
                 <a href="#">درباره ما</a>
-                <a href="#">تماس با ما</a>
-                <a href="#">وبلاگ</a>
             </div>
             <div class="footer-section">
-                <h4>قوانین</h4>
-                <a href="#">شرایط استفاده</a>
-                <a href="#">حریم خصوصی</a>
-                <a href="#">پشتیبانی</a>
+                <h4>تماس با ما</h4>
+                <a href="#">📞 ۰۲۱-44455913</a>
+                <a href="#">📧 mhmdin2007@gnail.com</a>
+                <a href="#">📍 تهران، میدان پونک پاساژ بزرگ بوستان همکف واحد 34 طلای اینانلو</a>
             </div>
             <div class="footer-section">
                 <h4>شبکه‌های اجتماعی</h4>
-                <a href="#">📧 ایمیل</a>
-                <a href="#">📱 تلگرام</a>
                 <a href="#">📷 اینستاگرام</a>
+                <a href="#">💬 تلگرام</a>
                 <a href="#">🐦 توییتر</a>
             </div>
         </div>
         <div class="footer-bottom">
-            <p>&copy; 2024 تکنولایف. تمامی حقوق محفوظ است.</p>
+            <p>&copy; ۲۰۲۴ طلا اینانلو. تمامی حقوق برای طلافروشان محفوظ است.</p>
         </div>
     </div>
 </footer>
