@@ -38,7 +38,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'app.apps.AppConfig',
-    'accounts',
+#    'accounts.apps.AccountsConfig',  #It is not required. we use below line..
+    'accounts', 
 ]
 
 MIDDLEWARE = [
@@ -115,6 +116,7 @@ USE_TZ = True
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/6.0/howto/static-files/
+AUTH_PROFILE_MODULE = 'accounts.Profile'
 
 STATIC_URL = 'static/'
 
