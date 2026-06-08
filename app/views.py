@@ -8,10 +8,39 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django import forms
 from django.contrib import messages
 from .forms import UserUpdateForm, ProfileUpdateForm
+from django.db import models
+from django.core.paginator import Paginator
+from django.db.models import Sum
 
 def survey_list(request):
+    search_query = request.GET.get('q', '')
     surveys = Survey.objects.filter(is_active=True)
-    return render(request, "app/survey_list.html", {"surveys": surveys})
+    sort_by = request.GET.get('sort', '-created_at')
+    
+    if search_query:
+        surveys = surveys.filter(
+            models.Q(question__icontains=search_query) | 
+            models.Q(product__name__icontains=search_query)    
+        )
+    
+    if sort_by == "-total_votes":
+        surveys = surveys.annotate(
+            total_votes = Sum('choice__votes')
+        ).order_by("-total_votes")
+    else :                 
+        surveys = surveys.order_by(sort_by)
+
+    paginator = Paginator(surveys, 6)
+    page_number = request.GET.get("page")
+    if not page_number:
+        page_number = 1
+    page_obj = paginator.get_page(page_number) 
+
+    return render(request, "app/survey_list.html", {
+        'surveys' : page_obj,
+        "search_query" : search_query,
+        "current_sort" : sort_by,
+    })
 
 def survey_detail(request, survey_id):
     survey = get_object_or_404(Survey, id=survey_id, is_active=True)

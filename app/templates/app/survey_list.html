@@ -6,8 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>طلا و جواهر اینانلو</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="{% static 'css/style.css' %}">
-</head>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}?v=2"></head>
 <body>
 
 <!-- Loading Screen -->
@@ -16,46 +15,108 @@
     <span>لطفا صبور باشید.</span>
 </div>
 
-<!-- Navbar -->
-<nav class="navbar">
+<!-- Navbar اصلی -->
+<nav class="navbar" id="navbar">
     <div class="container">
-        <a href="{% url 'survey_list' %}" class="logo">
-            <span class="logo-icon">💎</span>
-            <span>طلا و جواهر اینانلو</span>
-        </a>
-        
-        <div class="nav-links">
-            <a href="{% url 'survey_list' %}" class="nav-link">خانه</a>
-            <a href="#" class="nav-link">محصولات</a>
-            <a href="#" class="nav-link">مجموعه طلا</a>
-            <a href="#" class="nav-link">ارتباط با ما</a>
+        <!-- ردیف اول -->
+        <div class="navbar-row">
+            <a href="{% url 'survey_list' %}" class="logo">
+                <span class="logo-icon">💎</span>
+                <span>طلا و جواهر اینانلو</span>
+            </a>
             
-            {% if user.is_authenticated %}
-                <div class="dropdown">
-                    <div class="user-btn">
-                        <div class="user-avatar">👤</div>
-                        <span>{{ user.username }}</span>
-                        <span class="dropdown-arrow">▼</span>
+            <div class="search-container">
+                <form method="GET" action="" class="search-form">
+                    <div class="search-box">
+                        <input type="text" name="q" value="{{ search_query|default:'' }}" 
+                               placeholder="جستجوی محصولات طلا..."
+                               class="search-input">
+                        <button type="submit" class="search-button">
+                            <span>🔍</span>
+                            <span class="search-text">جستجو</span>
+                        </button>
                     </div>
-                    <div class="dropdown-menu">
-                        <a href="{% url 'profile_view' %}">
-                            <span>👤</span>پروفایل من
-                        </a>
-                        <a href="{% url 'profile_edit' %}">
-                            <span>✏️</span> ویرایش پروفایل
-                        </a>
-                        <a href="{% url 'logout' %}" style="color: var(--primary-color);">
-                            <span>🚪</span>خروج
-                        </a>
-                    </div>
+                </form>
+            </div>
+            
+            <div class="actions">
+                <!-- آیکون اعلان -->
+                <button class="icon-btn notification-btn" id="notificationBtn">
+                    <span>🔔</span>
+                </button>
+                
+                <!-- سبد خرید با مبلغ -->
+                <button class="cart-btn" id="cartBtn">
+                    <span>🛒</span>
+                    <span class="cart-amount">0 تومان</span>
+                </button>
+                
+                <!-- دکمه ورود/ثبت‌نام ترکیبی -->
+                <div class="auth-wrapper">
+                    {% if user.is_authenticated %}
+                        <div class="dropdown">
+                            <div class="user-btn">
+                                <div class="user-avatar">👤</div>
+                                <span>{{ user.username }}</span>
+                                <span class="dropdown-arrow">▼</span>
+                            </div>
+                            <div class="dropdown-menu">
+                                <a href="{% url 'profile_view' %}">👤 پروفایل من</a>
+                                <a href="{% url 'profile_edit' %}">✏️ ویرایش پروفایل</a>
+                                <hr>
+                                <a href="{% url 'logout' %}" style="color: var(--primary-color);">🚪 خروج</a>
+                            </div>
+                        </div>
+                    {% else %}
+                        <a href="{% url 'login' %}" class="btn btn-auth">👤 ورود / ثبت‌نام</a>
+                    {% endif %}
                 </div>
-            {% else %}
-                <a href="{% url 'login' %}" class="btn btn-outline">ورود</a>
-                <a href="{% url 'register' %}" class="btn btn-primary">عضویت طلایی</a>
-            {% endif %}
+            </div>
+        </div>
+        
+        <!-- ردیف دوم (منوی پایین) -->
+        <div class="navbar-row-bottom" id="stickyMenu">
+            <!-- منوی همبرگری محصولات -->
+            <div class="hamburger-menu">
+                <button class="hamburger-btn" id="hamburgerBtn">
+                    <span>☰</span>
+                    <span>محصولات</span>
+                </button>
+            </div>
+            
+            <!-- لینک‌های اصلی -->
+            <div class="bottom-links">
+                <a href="{% url 'survey_list' %}" class="bottom-link">خانه</a>
+                <a href="#" class="bottom-link">مجموعه طلا</a>
+                <a href="#" class="bottom-link">ارتباط با ما</a>
+                <a href="#" class="bottom-link">درباره ما</a>
+            </div>
+            
+            <!-- شماره تلفن -->
+            <div class="phone-number">
+                <span>📞</span>
+                <span>۰۲۱-۴۴۴۵۵۹۱۳</span>
+            </div>
         </div>
     </div>
 </nav>
+
+<!-- منوی کناری سمت راست (برای محصولات) -->
+<div class="sidebar-overlay" id="sidebarOverlay"></div>
+<div class="sidebar" id="sidebar">
+    <div class="sidebar-header">
+        <h3>📦 دسته‌بندی محصولات</h3>
+        <button class="sidebar-close" id="sidebarClose">✖️</button>
+    </div>
+    <ul class="sidebar-menu">
+        <li><a href="#">💍 انگشتر طلا</a></li>
+        <li><a href="#">📿 گردنبند طلا</a></li>
+        <li><a href="#">✋ دستبند طلا</a></li>
+        <li><a href="#">👂 النگو طلا</a></li>
+        <li><a href="#">💎 ست طلا</a></li>
+        <li><a href="#">⚜️ سکه و شمش</a></li>
+    </ul>
+</div>
 
 <!-- Hero Section -->
 <section class="hero">
@@ -66,11 +127,39 @@
 </section>
 
 <!-- Main Content -->
+<!-- Main Content -->
 <main class="container">
     <div class="section-title">
         <h2>📋 پرفروش ترین محصولات</h2>
     </div>
     
+    <!-- گزینه‌های مرتب‌سازی -->
+    <div class="sorting-bar">
+        <span class="sort-label">مرتب‌سازی بر اساس:</span>
+        <div class="sort-links">
+            <a href="?{% if search_query %}q={{ search_query }}&{% endif %}sort=-created_at" 
+            class="sort-link {% if current_sort == '-created_at' %}active{% endif %}">
+                📅 جدیدترین
+            </a>
+            <a href="?{% if search_query %}q={{ search_query }}&{% endif %}sort=created_at" 
+            class="sort-link {% if current_sort == 'created_at' %}active{% endif %}">
+                📅 قدیمی‌ترین
+            </a>
+            <a href="?{% if search_query %}q={{ search_query }}&{% endif %}sort=-total_votes" 
+            class="sort-link {% if current_sort == '-total_votes' %}active{% endif %}">
+                🔥 پرطرفدارترین
+            </a>
+        </div>
+    </div>
+    
+    <!-- نتیجه جستجو -->
+    {% if search_query %}
+        <div class="search-info">
+            <span>🔍 نتیجه جستجو برای: <strong>{{ search_query }}</strong></span>
+            <a href="{% url 'survey_list' %}" class="clear-search">✖️ نمایش همه</a>
+        </div>
+    {% endif %}
+
     {% if surveys %}
         <div class="surveys-grid">
             {% for survey in surveys %}
@@ -87,10 +176,30 @@
                 </div>
             {% endfor %}
         </div>
+
+        <!-- صفحه‌بندی -->
+        {% if surveys.has_other_pages %}
+            <div class="pagination">
+                {% if surveys.has_previous %}
+                    <a href="?page=1{% if search_query %}&q={{ search_query }}{% endif %}" class="page-link">⏮ اولین</a>
+                    <a href="?page={{ surveys.previous_page_number }}{% if search_query %}&q={{ search_query }}{% endif %}" class="page-link">◀ قبلی</a>
+                {% endif %}
+
+                <span class="current-page">
+                    صفحه {{ surveys.number }} از {{ surveys.paginator.num_pages }}
+                </span>
+
+                {% if surveys.has_next %}
+                    <a href="?page={{ surveys.next_page_number }}{% if search_query %}&q={{ search_query }}{% endif %}" class="page-link">بعدی ▶</a>
+                    <a href="?page={{ surveys.paginator.num_pages }}{% if search_query %}&q={{ search_query }}{% endif %}" class="page-link">آخرین ⏭</a>
+                {% endif %}
+            </div>
+        {% endif %}
+
     {% else %}
-        <div style="text-align: center; padding: 60px; background: rgba(255,255,255,0.85); backdrop-filter: blur(10px); border-radius: 24px;">
-            <p style="font-size: 1.2rem;">😔 هیچ نظرسنجی فعالی وجود ندارد.</p>
-            <p style="margin-top: 10px; color: var(--gray);">لطفاً بعداً مراجعه کنید.</p>
+        <div class="no-results">
+            <p>😔 هیچ نتیجه‌ای برای "{{ search_query }}" یافت نشد.</p>
+            <p class="suggestions">پیشنهاد: کلمه دیگری را جستجو کنید.</p>
         </div>
     {% endif %}
 </main>
@@ -100,7 +209,7 @@
     <div class="container">
         <div class="footer-content">
             <div class="footer-section">
-                <h4>💎 تکنولایف</h4>
+                <h4>💎 طلا و جواهر اینانلو</h4>
                 <p>سامانه حرفه‌ای نظرسنجی و تحلیل بازار طلا و جواهر</p>
             </div>
             <div class="footer-section">
@@ -111,9 +220,9 @@
             </div>
             <div class="footer-section">
                 <h4>تماس با ما</h4>
-                <a href="#">📞 ۰۲۱-44455913</a>
-                <a href="#">📧 mhmdin2007@gnail.com</a>
-                <a href="#">📍 تهران، میدان پونک پاساژ بزرگ بوستان همکف واحد 34 طلای اینانلو</a>
+                <a href="#">📞 ۰۲۱-۴۴۴۵۵۹۱۳</a>
+                <a href="#">📧 mhmdin2007@gmail.com</a>
+                <a href="#">📍 تهران، میدان پونک، پاساژ بزرگ بوستان</a>
             </div>
             <div class="footer-section">
                 <h4>شبکه‌های اجتماعی</h4>
@@ -123,11 +232,82 @@
             </div>
         </div>
         <div class="footer-bottom">
-            <p>&copy; ۲۰۲۴ طلا اینانلو. تمامی حقوق برای طلافروشان محفوظ است.</p>
+            <p>&copy; ۲۰۲۴ طلا اینانلو. تمامی حقوق محفوظ است.</p>
         </div>
     </div>
 </footer>
 
 <script src="{% static 'js/main.js' %}"></script>
+<script>
+    // منوی همبرگری
+    const hamburgerBtn = document.getElementById('hamburgerBtn');
+    const sidebar = document.getElementById('sidebar');
+    const sidebarOverlay = document.getElementById('sidebarOverlay');
+    const sidebarClose = document.getElementById('sidebarClose');
+    
+    function openSidebar() {
+        sidebar.classList.add('open');
+        sidebarOverlay.classList.add('active');
+        document.body.style.overflow = 'hidden';
+    }
+    
+    function closeSidebar() {
+        sidebar.classList.remove('open');
+        sidebarOverlay.classList.remove('active');
+        document.body.style.overflow = '';
+    }
+    
+    hamburgerBtn.addEventListener('click', openSidebar);
+    sidebarClose.addEventListener('click', closeSidebar);
+    sidebarOverlay.addEventListener('click', closeSidebar);
+    
+    // افکت اسکرول روی منو
+    window.addEventListener('scroll', function() {
+        const navbar = document.getElementById('navbar');
+        const stickyMenu = document.getElementById('stickyMenu');
+        
+        if (window.scrollY > 50) {
+            navbar.classList.add('scrolled');
+            stickyMenu.classList.add('sticky');
+        } else {
+            navbar.classList.remove('scrolled');
+            stickyMenu.classList.remove('sticky');
+        }
+    });
+    
+    // حذف لودینگ
+    window.addEventListener('load', function() {
+        setTimeout(function() {
+            const loading = document.getElementById('loading');
+            if (loading) {
+                loading.classList.remove('show');
+            }
+        }, 500);
+    });
+    
+    // کلیک روی کارت‌ها
+    document.querySelectorAll('.survey-card').forEach(card => {
+        card.addEventListener('click', function() {
+            const href = this.dataset.href;
+            if (href) window.location.href = href;
+        });
+    });
+    
+    // نوتیفیکیشن (فعلاً ساده)
+    const notificationBtn = document.getElementById('notificationBtn');
+    if (notificationBtn) {
+        notificationBtn.addEventListener('click', function() {
+            alert('اعلان‌ها: هیچ اعلان جدیدی وجود ندارد.');
+        });
+    }
+    
+    // سبد خرید (موقتاً نمایش پیام)
+    const cartBtn = document.getElementById('cartBtn');
+    if (cartBtn) {
+        cartBtn.addEventListener('click', function() {
+            alert('سبد خرید در حال توسعه است...');
+        });
+    }
+</script>
 </body>
 </html>
