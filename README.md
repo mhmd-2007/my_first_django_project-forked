@@ -1,1 +1,3 @@
 # a simple project with (python | django)
+and it text will update very soon. wait for it...
+it may be fun.
