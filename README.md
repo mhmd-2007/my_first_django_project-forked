@@ -1,3 +1,3 @@
 # a simple project with (python | django)
 And it text will update very soon. Wait for it...
-It may be fun.
+It may be fun.I would be happy if you join me in this project.
