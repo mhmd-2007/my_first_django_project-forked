@@ -1,3 +1,3 @@
 # a simple project with (python | django)
-##and it text will update very soon. wait for it...\n
-it may be fun.
+And it text will update very soon. Wait for it...
+It may be fun.
